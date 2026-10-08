@@ -1,0 +1,26 @@
+import cors from "cors";
+import express from "express";
+import helmet from "helmet";
+import "./database/database.js";
+import { healthRouter } from "./routes/healthRoutes.js";
+import { analysisRouter } from "./routes/analysisRoutes.js";
+import { issueRouter } from "./routes/issueRoutes.js";
+import { metadataRouter } from "./routes/metadataRoutes.js";
+import { requirementRouter } from "./routes/requirementRoutes.js";
+import { jiraRouter } from "./routes/jiraRoutes.js";
+import { scanRouter } from "./routes/scanRoutes.js";
+
+export const app = express();
+app.use(helmet());
+app.use(cors());
+app.use(express.json({ limit: "1mb" }));
+app.use("/api/health", healthRouter);
+app.use("/api/analysis", analysisRouter);
+app.use("/api/issues", issueRouter);
+app.use("/api/wcag-criteria", metadataRouter);
+app.use("/api/requirements", requirementRouter);
+app.use("/api/jira", jiraRouter);
+app.use("/api/scans", scanRouter);
+app.use((_request, response) =>
+  response.status(404).json({ error: "Route not found" }),
+);
